@@ -4,7 +4,7 @@
 
 currentuser=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')
 
-    echo "Quitting any open apps"
+    echo "Quitting any open Office applications..."
     osascript -e 'quit app "Microsoft Word"'
     osascript -e 'quit app "Microsoft Excel"'
     osascript -e 'quit app "Microsoft Powerpoint"'
@@ -29,22 +29,20 @@ currentuser=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStore
     rm -rf /Users/$currentuser/Library/Containers/com.microsoft.Word
     rm -rf /Users/$currentuser/Library/Containers/com.microsoft.onenote.mac
 
-    echo "Moving Outlook Database to /tmp folder"
+    echo "Moving Outlook Database to /tmp folder..."
     mv "/Users/$currentuser/Library/Group Containers/UBF8T346G9.Office/Outlook/Outlook 15 Profiles" "/tmp"
 
-    echo "Deleting Outlook files in User's library"
+    echo "Deleting Outlook files in User's library..."
     rm -rf "/Users/$currentuser/Library/Group Containers/UBF8T346G9.ms"
     rm -rf "/Users/$currentuser/Library/Group Containers/UBF8T346G9.Office"
     rm -rf "/Users/$currentuser/Library/Group Containers/UBF8T346G9.OfficeOsfWebHost"
 
-    echo "Creating folder for Outlook Database, applying appropriate permissions and moving the database back."
+    echo "Creating folder for Outlook Database, applying appropriate permissions and moving the database back..."
     mkdir -p "/Users/$currentuser/Library/Group Containers/UBF8T346G9.Office/Outlook/Outlook 15 Profiles"
     chown $currentuser: "/Users/$currentuser/Library/Group Containers/UBF8T346G9.Office/"
     chown $currentuser: "/Users/$currentuser/Library/Group Containers/UBF8T346G9.Office/Outlook/"
     chown $currentuser: "/Users/$currentuser/Library/Group Containers/UBF8T346G9.Office/Outlook/Outlook 15 Profiles"
     mv "/tmp/Outlook 15 Profiles/" "/Users/$currentuser/Library/Group Containers/UBF8T346G9.Office/Outlook/"
-
-    # further cleaning
 
     echo "Cleaning system folders..."
     rm -rf "/Library/Application Support/Microsoft/MAU2.0"
@@ -77,7 +75,6 @@ currentuser=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStore
     pkgutil --forget com.microsoft.package.Proofing_Tools
     pkgutil --forget com.microsoft.package.licensing
 
-    echo "All Done! Ready to install Office 2016"
+    echo "Cleaned and ready to go!"
 
 exit 0
-exit 1
